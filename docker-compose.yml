@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+    app:
+        build: ./app
+        volumes:
+            - ./app/:/usr/src/app
+        ports:
+            - 8002:80
+        depends_on: 
+            - db
+        links:
+            - db
+    db:
+        image: mysql:latest
+        ports:
+            - 8001:3306
+        environment:
+            MYSQL_ROOT_USER: root
+            MYSQL_ROOT_PASSWORD: secret
+            MYSQL_DATABASE: test
+            MYSQL_USER: user
+            MYSQL_PASSWORD: secret
+        command: --init-file /data/application/init.sql
+        volumes: 
+            - ./app/init.sql:/data/application/init.sql
